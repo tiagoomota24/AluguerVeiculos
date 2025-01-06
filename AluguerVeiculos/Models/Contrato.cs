@@ -8,11 +8,11 @@ namespace AluguerVeiculos.Models
 
         [Required]
         public int ClienteId { get; set; }
-        public required Cliente Cliente { get; set; }
+        public Cliente Cliente { get; set; }
 
         [Required]
         public int VeiculoId { get; set; }
-        public required Veiculo Veiculo { get; set; }
+        public Veiculo Veiculo { get; set; }
 
         [Required]
         [CustomValidation(typeof(Contrato), nameof(ValidarDataInicio))]
@@ -50,6 +50,18 @@ namespace AluguerVeiculos.Models
             }
 
             return ValidationResult.Success;
+        }
+
+        public void AtualizarEstadoVeiculo()
+        {
+            if (DataFim > DateTime.Now)
+            {
+                Veiculo.Estado = "Alugado";
+            }
+            else
+            {
+                Veiculo.Estado = "Disponível";
+            }
         }
     }
 }
