@@ -19,7 +19,6 @@ public class DataContext (DbContextOptions<DataContext> options)
                 .HasIndex(v => v.Matricula)
                 .IsUnique();
 
-            // Configurar a constraint UNIQUE para a coluna Email
             modelBuilder.Entity<Cliente>()
                 .HasIndex(c => c.Email)
                 .IsUnique();
