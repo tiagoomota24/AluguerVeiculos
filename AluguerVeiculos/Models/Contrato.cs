@@ -24,7 +24,12 @@ namespace AluguerVeiculos.Models
 
         [Required(ErrorMessage = "A quilometragem inicial é obrigatória")]
         public int QuilometragemInicial { get; set; }
-    
+
+        public int QuilometragemFinal { get; set; }
+
+        [Required]
+        public string Estado_Contrato { get; set; } = "Ativo"; 
+
 
         public static ValidationResult ValidarDataInicio(DateTime dataInicio, ValidationContext context)
         {
@@ -56,10 +61,12 @@ namespace AluguerVeiculos.Models
         {
             if (DataFim > DateTime.Now)
             {
+                Estado_Contrato = "Ativo";
                 Veiculo.Estado = "Alugado";
             }
             else
             {
+                Estado_Contrato = "Encerrado";
                 Veiculo.Estado = "Disponível";
             }
         }

@@ -32,6 +32,8 @@ namespace AluguerVeiculos.Models
         [Required(ErrorMessage = "O tipo de combustível é obrigatório")]
         public required string Tipo_de_Combustivel { get; set; }
 
+        public int Quilometragem { get; set; }
+
         [Required(ErrorMessage ="O estado é obrigatório")]
         public string Estado { get; set; } = "Disponível";
        
