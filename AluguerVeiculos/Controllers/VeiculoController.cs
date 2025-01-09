@@ -1,6 +1,8 @@
 using AluguerVeiculos.Data;
 using AluguerVeiculos.Models;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
+using X.PagedList.Extensions;
 
 namespace AluguerVeiculos.Controllers
 {
@@ -14,29 +16,46 @@ namespace AluguerVeiculos.Controllers
         }
 
         //Listar os veiculos
-        public IActionResult Index()
+        public IActionResult Index(int? page)
         {
-            var veiculos = _context.Veiculos.ToList();
+
+            int pageSize = 10;
+            int pageNumber = page ?? 1;
+
+            var veiculos = _context.Veiculos.OrderBy(v => v.Marca).ToPagedList(pageNumber, pageSize);
             return View(veiculos);
         }
 
-        //GET: Formulário para criar novo veiculo
+        //GET: Formulário para criar veiculo
         public IActionResult Create()
         {
             return View();
         }
 
-        //POST: Criação de um novo veiculo
+        //POST: Criar veiculo
         [HttpPost]
         [ValidateAntiForgeryToken]
         public IActionResult Create (Veiculo veiculo)
         {
             if (ModelState.IsValid)
             {
-                _context.Veiculos.Add(veiculo);
-                _context.SaveChanges();
-                return RedirectToAction(nameof(Index));
-            }
+                try
+                {
+                    _context.Veiculos.Add(veiculo);
+                    _context.SaveChanges();
+                    return RedirectToAction(nameof(Index));
+                }
+                catch (DbUpdateException ex)
+                {
+                    if (ex.InnerException != null && ex.InnerException.Message.Contains("IX_Veiculos_Matricula"))
+                    {
+                        ModelState.AddModelError("Matricula", "Já existe um veículo com esta matrícula.");
+                    }
+                    else
+                    {
+                        ModelState.AddModelError(string.Empty, "Ocorreu um erro ao salvar o veículo. Tente novamente.");
+                    }
+                }            }
             return View(veiculo);
         }
         
@@ -54,6 +73,82 @@ namespace AluguerVeiculos.Controllers
                 veiculo.Estado = "Disponível";
             }
             _context.SaveChanges();
+        }
+
+        //GET: Formulário para Editar Veiculo
+        public IActionResult Edit(int id)
+        {
+            var veiculo = _context.Veiculos.Find(id);
+            if (veiculo == null)
+            {
+                return NotFound();
+            }
+            return View(veiculo);
+        }
+
+        //POST: Editar Veiculo
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult Edit(Veiculo veiculo)
+        {
+            if (ModelState.IsValid)
+            {
+                try
+                {
+                    _context.Veiculos.Update(veiculo);
+
+                    var contrato = _context.Contrato.Where(c => c.VeiculoId == veiculo.Id && c.Estado_Contrato == "Encerrado").OrderByDescending(c => c.DataFim).FirstOrDefault();
+                    if (contrato != null)
+                    {
+                        contrato.QuilometragemFinal = veiculo.Quilometragem;
+                        _context.Contrato.Update(contrato);
+                    }
+                    _context.SaveChanges();
+                    return RedirectToAction(nameof(Index));
+                }
+                catch (DbUpdateException ex)
+                {
+                    if (ex.InnerException != null && ex.InnerException.Message.Contains("IX_Veiculos_Matricula"))
+                    {
+                        ModelState.AddModelError("Matricula", "Já existe um veículo com esta matrícula.");
+                    }
+                    else
+                    {
+                        ModelState.AddModelError(string.Empty, "Ocorreu um erro ao salvar o veículo. Tente novamente.");
+                    }
+                }
+            }
+            return View(veiculo);
+        }
+
+        //GET: Eliminar Veiculo
+        public IActionResult Delete(int id)
+        {
+            var veiculo = _context.Veiculos.Find(id);
+            if (veiculo == null)
+            {
+                return NotFound();
+            }
+            return View(veiculo);
+        }
+
+        //POST: Eliminar Veiculo
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult Delete(Veiculo veiculo)
+        {
+            try
+            {
+                _context.Veiculos.Remove(veiculo);
+                _context.SaveChanges();
+                return RedirectToAction(nameof(Index));
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Erro ao apagar o veículo: {ex.Message}");
+                ModelState.AddModelError(string.Empty, "Erro ao apagar o veículo.");
+            }
+            return View(veiculo);
         }
     }
 }

@@ -1,6 +1,8 @@
 using AluguerVeiculos.Data;
 using AluguerVeiculos.Models;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
+using X.PagedList.Extensions;
 
 namespace AluguerVeiculos.Controllers
 {
@@ -14,9 +16,12 @@ namespace AluguerVeiculos.Controllers
         }
 
         //Lista os clientes
-        public IActionResult Index()
+        public IActionResult Index(int? page)
         {
-            var clientes = _context.Clientes.ToList();
+            int pageSize = 10;
+            int pageNumber = page ?? 1;
+
+            var clientes = _context.Clientes.OrderBy(clientes => clientes.Nome_Completo).ToPagedList(pageNumber, pageSize);
             return View(clientes);
         }
 
@@ -26,19 +31,100 @@ namespace AluguerVeiculos.Controllers
             return View();
         }
         
-        //POST: Criação do cliente
+        //POST: Criar Cliente
         [HttpPost]
         [ValidateAntiForgeryToken]
         public IActionResult Create(Cliente cliente)
         {
             if (ModelState.IsValid)
             {
-                _context.Clientes.Add(cliente);
+                try
+                {
+                    _context.Clientes.Add(cliente);
+                    _context.SaveChanges();
+                    return RedirectToAction(nameof(Index));
+                }
+                catch (DbUpdateException ex)
+                {
+                    if (ex.InnerException != null && ex.InnerException.Message.Contains("IX_Clientes_Email"))
+                    {
+                        ModelState.AddModelError("Email", "Já existe um cliente com este email.");
+                    }
+                    else
+                    {
+                        ModelState.AddModelError(string.Empty, "Ocorreu um erro ao salvar o cliente. Tente novamente.");
+                    }
+                }
+            }
+            return View(cliente);
+        }
+
+        //GET: Formulário para Editar Cliente
+        public IActionResult Edit(int id)
+        {
+            var cliente = _context.Clientes.Find(id);
+            if (cliente == null)
+            {
+                return NotFound();
+            }
+            return View(cliente);
+        }
+
+        //POST: Editar Cliente
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult Edit(Cliente cliente)
+        {
+            if (ModelState.IsValid)
+            {
+                try
+                {
+                    _context.Clientes.Update(cliente);
+                    _context.SaveChanges();
+                    return RedirectToAction(nameof(Index));
+                }
+                catch (DbUpdateException ex)
+                {
+                    if (ex.InnerException != null && ex.InnerException.Message.Contains("IX_Clientes_Email"))
+                    {
+                        ModelState.AddModelError("Email", "Já existe um cliente com este email.");
+                    }
+                    else
+                    {
+                        ModelState.AddModelError(string.Empty, "Ocorreu um erro ao salvar o cliente. Tente novamente.");
+                    }
+                }
+            }
+            return View(cliente);
+        }
+
+        //GET: Eliminar Cliente
+        public IActionResult Delete(int id)
+        {
+            var cliente = _context.Clientes.Find(id);
+            if (cliente == null)
+            {
+                return NotFound();
+            }
+            return View(cliente);
+        }
+
+        //POST: Eliminar Cliente
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult Delete(Cliente cliente)
+        {
+            try
+            {
+                _context.Clientes.Remove(cliente);
                 _context.SaveChanges();
                 return RedirectToAction(nameof(Index));
             }
+            catch (DbUpdateException ex)
+            {
+                ModelState.AddModelError(string.Empty, "Ocorreu um erro ao apagar o cliente. Tente novamente.");
+            }
             return View(cliente);
-            
         }
     }
 }
