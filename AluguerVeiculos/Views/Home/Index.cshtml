@@ -37,13 +37,13 @@
 
     <div class="row text-center">
         <div class="col-md-4">
-            <a href="/Veiculo" class="btn btn-primary btn-lg btn-block">Gerir Veículos</a>
+            <a href="/Veiculo" class="btn btn-success btn-lg btn-block">Gerir Veículos</a>
         </div>
         <div class="col-md-4">
             <a href="/Contrato" class="btn btn-success btn-lg btn-block">Gerir Contratos</a>
         </div>
         <div class="col-md-4">
-            <a href="/Cliente" class="btn btn-info btn-lg btn-block">Gerir Clientes</a>
+            <a href="/Cliente" class="btn btn-success btn-lg btn-block">Gerir Clientes</a>
         </div>
     </div>
 
@@ -53,7 +53,7 @@
         @if (ViewBag.VeiculosComErro > 0)
         {
             <div class="alert alert-warning">
-                <strong>Nota:</strong> Existe(m) @ViewBag.VeiculosComErro veículo(s) com quilometragem incorreta. Verifique os veículos para corrigir.
+                <strong>Nota:</strong> Existe(m) @ViewBag.VeiculosComErro veículo(s) com quilometragem negativa. Verifique para corrigir.
             </div>
         }
         else
