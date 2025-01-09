@@ -1,31 +1,28 @@
-using System.Diagnostics;
+using AluguerVeiculos.Data;
 using Microsoft.AspNetCore.Mvc;
-using AluguerVeiculos.Models;
 
-namespace AluguerVeiculos.Controllers;
-
-public class HomeController : Controller
+namespace AluguerVeiculos.Controllers
 {
-    private readonly ILogger<HomeController> _logger;
-
-    public HomeController(ILogger<HomeController> logger)
+    public class HomeController : Controller
     {
-        _logger = logger;
-    }
+        private readonly DataContext _context;
 
-    public IActionResult Index()
-    {
-        return View();
-    }
+        public HomeController(DataContext context)
+        {
+            _context = context;
+        }
 
-    public IActionResult Privacy()
-    {
-        return View();
-    }
+        public IActionResult Index()
+        {
 
-    [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
-    public IActionResult Error()
-    {
-        return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
+            int veiculosComErro = _context.Veiculos.Count(v => v.Quilometragem < 0);
+            ViewBag.VeiculosComErro = veiculosComErro;
+
+            ViewBag.VeiculosDisponiveis = _context.Veiculos.Count(v => v.Estado == "Disponível");
+            ViewBag.ContratosAtivos = _context.Contrato.Count(c => c.Estado_Contrato == "Ativo");
+            ViewBag.ClientesTotal = _context.Clientes.Count();
+
+            return View();
+        }
     }
 }
