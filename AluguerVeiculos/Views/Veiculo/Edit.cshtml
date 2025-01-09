@@ -1,0 +1,42 @@
+@model AluguerVeiculos.Models.Veiculo
+
+@{
+    ViewData["Title"] = "Editar Veículo";
+}
+
+<h1>Editar Veiculo</h1>
+
+<form asp-action="Edit" method="post">
+    <input type="hidden" asp-for="Id" />
+    <div class="form-group">
+        <label for="Marca">Marca</label>
+        <input asp-for="Marca" class="form-control" />
+        <span asp-validation-for="Marca" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <label for="Modelo">Modelo</label>
+        <input asp-for="Modelo" class="form-control" />
+        <span asp-validation-for="Modelo" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <label for="Matricula">Matricula</label>
+        <input asp-for="Matricula" class="form-control" />
+        <span asp-validation-for="Matricula" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <label for="Ano_de_fabrico">Ano de fabrico</label>
+        <input asp-for="Ano_de_fabrico" class="form-control" />
+        <span asp-validation-for="Ano_de_fabrico" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <label for="Tipo_de_Combustivel">Tipo de Combustivel</label>
+        <input asp-for="Tipo_de_Combustivel" class="form-control" />
+        <span asp-validation-for="Tipo_de_Combustivel" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <label for="Quilometragem">Quilometragem</label>
+        <input asp-for="Quilometragem" class="form-control" />
+        <span asp-validation-for="Quilometragem" class="text-danger"></span>
+    </div>
+    <button type="submit" class="btn btn-success">Salvar</button>
+</form>

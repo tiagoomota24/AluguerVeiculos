@@ -1,0 +1,25 @@
+@model AluguerVeiculos.Models.Contrato
+
+@{
+    ViewData["Title"] = "Eliminar Veículo";
+}
+
+<h1 class="text-center">Eliminar Contrato</h1>
+
+<p class="text-center">Tens a certeza de que desejas eliminar o contrato abaixo?</p>
+
+<div class="text-center">
+    <ul class="list-unstyled">
+        <li><strong>Cliente:</strong> @Model.Cliente?.Nome_Completo</li>
+        <li><strong>Veículo:</strong> @Model.Veiculo?.Matricula</li>
+        <li><strong>Estado do Contrato:</strong> @Model.Estado_Contrato</li>
+    </ul>
+</div>
+
+<div class="text-center mt-4">
+    <form asp-action="Delete" method="post" style="display: inline-block;">
+        <input type="hidden" asp-for="Id" />
+        <button type="submit" class="btn btn-danger">Eliminar</button>
+    </form>
+    <a asp-action="Index" class="btn btn-secondary">Cancelar</a>
+</div>

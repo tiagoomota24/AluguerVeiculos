@@ -1,0 +1,43 @@
+@model X.PagedList.PagedList<AluguerVeiculos.Models.Cliente>
+@using X.PagedList.Mvc.Core;
+
+@{
+    ViewData["Title"] = "Lista de Clientes";
+}
+
+<h1>Lista de Clientes</h1>
+
+
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Nome Completo</th>
+            <th>Email</th>
+            <th>Telefone</th>
+            <th>Carta de Condução</th>
+            <th>Ações</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var cliente in Model)
+        {
+            <tr>
+                <td>@cliente.Nome_Completo</td>
+                <td>@cliente.Email</td>
+                <td>@cliente.Telefone</td>
+                <td>@cliente.Carta_de_Conducao</td>
+                <td>
+                    <a asp-action="Edit" asp-route-id="@cliente.Id" class="btn btn-warning">Editar</a>
+                    <a asp-action="Delete" asp-route-id="@cliente.Id" class="btn btn-danger">X</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+<a asp-action="Create" class="btn btn-primary">Adicionar Novo Cliente</a>
+
+<div class="mt-3">
+    @Html.PagedListPager(Model, page => Url.Action("Index", new { page }))
+</div>

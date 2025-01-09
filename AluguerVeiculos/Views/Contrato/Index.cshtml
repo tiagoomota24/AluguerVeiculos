@@ -1,0 +1,50 @@
+@using X.PagedList.Mvc.Core;
+@model X.PagedList.PagedList<AluguerVeiculos.Models.Contrato>
+
+@{
+    ViewData["Title"] = "Lista de Contratos";
+}
+
+<h1>Lista de Contratos</h1>
+
+
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Cliente</th>
+            <th>Veículo</th>
+            <th>Data de Início</th>
+            <th>Data de Fim</th>
+            <th>Quilometragem Inicial</th>
+            <th>Quilometragem Final</th>
+            <th>Estado do Contrato</th>
+            <th>Ações</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var contrato in Model)
+        {
+            <tr>
+                <td>@contrato.Cliente.Nome_Completo</td>
+                <td>@contrato.Veiculo.Matricula</td>
+                <td>@contrato.DataInicio.ToString("g")</td>
+                <td>@contrato.DataFim.ToString("g")</td>
+                <td>@contrato.QuilometragemInicial</td>
+                <td>@contrato.QuilometragemFinal</td>
+                <td>@contrato.Estado_Contrato</td>
+                <td>
+                <!--<a asp-action="Edit" asp-route-id="@contrato.Id" class="btn btn-warning">Editar</a>-->
+                <a asp-action="Delete" asp-route-id="@contrato.Id" class="btn btn-danger">X</a>
+                </td>
+                   
+            </tr>
+        }
+    </tbody>
+</table>
+
+<a asp-action="Create" class="btn btn-primary">Adicionar Novo Contrato</a>
+
+<div class="mt-3">
+    @Html.PagedListPager(Model, page => Url.Action("Index", new { page }))
+</div>

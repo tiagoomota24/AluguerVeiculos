@@ -1,8 +1,67 @@
 ﻿@{
-    ViewData["Title"] = "Home Page";
+    ViewData["Title"] = "Página Inicial";
 }
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://learn.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+<div class="container mt-5">
+    <div class="text-center mb-4">
+        <h1 class="display-3">Bem-vindo ao Sistema de Aluguer de Veículos - Grupo JAP - </h1>
+        <p class="lead">Aqui podes gerir os clientes, veículos e contratos de forma eficaz e rápida.</p>
+    </div>
+
+    <div class="row text-center mb-4">
+        <div class="col-md-4">
+            <div class="card bg-light shadow-sm">
+                <div class="card-body">
+                    <h5 class="card-title">Veículos Disponíveis</h5>
+                    <p class="display-4">@ViewBag.VeiculosDisponiveis</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card bg-light shadow-sm">
+                <div class="card-body">
+                    <h5 class="card-title">Contratos Ativos</h5>
+                    <p class="display-4">@ViewBag.ContratosAtivos</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card bg-light shadow-sm">
+                <div class="card-body">
+                    <h5 class="card-title">Clientes Registados</h5>
+                    <p class="display-4">@ViewBag.ClientesTotal</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row text-center">
+        <div class="col-md-4">
+            <a href="/Veiculo" class="btn btn-primary btn-lg btn-block">Gerir Veículos</a>
+        </div>
+        <div class="col-md-4">
+            <a href="/Contrato" class="btn btn-success btn-lg btn-block">Gerir Contratos</a>
+        </div>
+        <div class="col-md-4">
+            <a href="/Cliente" class="btn btn-info btn-lg btn-block">Gerir Clientes</a>
+        </div>
+    </div>
+
+    <div class="mt-5">
+        <h4>Avisos</h4>
+        
+        @if (ViewBag.VeiculosComErro > 0)
+        {
+            <div class="alert alert-warning">
+                <strong>Nota:</strong> Existe(m) @ViewBag.VeiculosComErro veículo(s) com quilometragem incorreta. Verifique os veículos para corrigir.
+            </div>
+        }
+        else
+        {
+            <div class="alert alert-success">
+                <strong>Todos os veículos estão com a quilometragem correta.</strong>
+            </div>
+        }
+
+    </div>
 </div>

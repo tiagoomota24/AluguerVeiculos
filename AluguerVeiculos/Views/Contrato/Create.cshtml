@@ -1,0 +1,37 @@
+@model AluguerVeiculos.Models.Contrato
+
+@{
+    ViewData["Title"] = "Adicionar Contrato";
+}
+
+<h1>Adicionar Novo Contrato</h1>
+
+<form asp-action="Create" method="post">
+    <div class="form-group">
+        <label for="ClienteId">Cliente</label>
+        <select asp-for="ClienteId" asp-items="@(new SelectList(ViewBag.Clientes, "Id", "Nome_Completo"))" class="form-control"></select>
+        <span asp-validation-for="ClienteId" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <label for="VeiculoId">Veículo</label>
+        <select asp-for="VeiculoId" asp-items="@(new SelectList(ViewBag.Veiculos, "Id", "Matricula"))" class="form-control"></select>
+        <span asp-validation-for="VeiculoId" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <label for="DataInicio">Data de Início</label>
+        <input asp-for="DataInicio" type="datetime-local" class="form-control" 
+        max="@DateTime.Now.AddDays(15).ToString("yyyy-MM-ddTHH:mm")" />
+        <span asp-validation-for="DataInicio" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <label for="DataFim">Data de Fim</label>
+        <input asp-for="DataFim" type="datetime-local" class="form-control" />
+        <span asp-validation-for="DataFim" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <label for="QuilometragemInicial">Quilometragem Inicial</label>
+        <input asp-for="QuilometragemInicial" class="form-control" />
+        <span asp-validation-for="QuilometragemInicial" class="text-danger"></span>
+    </div>
+    <button type="submit" class="btn btn-success">Salvar</button>
+</form>

@@ -1,0 +1,49 @@
+@model X.PagedList.PagedList<AluguerVeiculos.Models.Veiculo>
+@using X.PagedList.Mvc.Core;
+
+@{
+    ViewData["Title"] = "Lista de Veículos";
+}
+
+<h1>Lista de Veículos</h1>
+
+
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Marca</th>
+            <th>Modelo</th>
+            <th>Matrícula</th>
+            <th>Ano de Fabrico</th>
+            <th>Tipo de Combustível</th>
+            <th>Quilometragem</th>
+            <th>Estado</th>
+            <th>Ações</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var veiculo in Model)
+        {
+            <tr>
+                <td>@veiculo.Marca</td>
+                <td>@veiculo.Modelo</td>
+                <td>@veiculo.Matricula</td>
+                <td>@veiculo.Ano_de_fabrico</td>
+                <td>@veiculo.Tipo_de_Combustivel</td>
+                <td>@veiculo.Quilometragem</td>
+                <td>@veiculo.Estado</td>
+                <td>
+                    <a asp-action="Edit" asp-route-id="@veiculo.Id" class="btn btn-warning">Editar</a>
+                    <a asp-action="Delete" asp-route-id="@veiculo.Id" class="btn btn-danger">X</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+<a asp-action="Create" class="btn btn-primary">Adicionar Novo Veículo</a>
+
+<div class="mt-3">
+    @Html.PagedListPager(Model, page => Url.Action("Index", new { page }))
+</div>
