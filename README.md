@@ -26,7 +26,7 @@ A web application for managing vehicle rentals, allowing you to efficiently crea
 2. **Configure the appsettings.json file with the connection string for SQL Server:
     ```bash
    "ConnectionStrings": {
-    "DefaultConnection": "Server=SEU_SERVIDOR;Database=SEU_BANCO_DE_DADOS;Trusted_Connection=True;"
+    "DefaultConnection": "Server=NOME_SERVIDOR;Database=NOME_BASE_DE_DADOS;Trusted_Connection=True;"
     }
 3. **Restore NuGet packages:**
    ```bash
